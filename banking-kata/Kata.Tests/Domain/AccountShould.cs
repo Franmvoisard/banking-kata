@@ -6,11 +6,12 @@ namespace Kata.Tests.Domain;
 
 public class AccountShould
 {
-    private InMemoryMoneyRepository _moneyRepository;
-    private TransactionRepository _transactionsRepository;
-    private DateProvider _dateProvider;
     private Account _account;
+    private IMoneyRepository _moneyRepository;
+    private ITransactionRepository _transactionsRepository;
+    private IDateProvider _dateProvider;
     private ITransactionPrinter _transactionPrinter;
+    private IConsole _console;
 
     [SetUp]
     public void Setup()
@@ -18,7 +19,8 @@ public class AccountShould
         _moneyRepository = new InMemoryMoneyRepository();
         _transactionsRepository = new TransactionRepository();
         _dateProvider = new DateProvider();
-        _transactionPrinter = new TransactionPrinter();
+        _console = new Console();
+        _transactionPrinter = new TransactionPrinter(_moneyRepository, _console);
         _account = new Account(_moneyRepository, _transactionsRepository, _dateProvider, _transactionPrinter);
     }
 

@@ -3,13 +3,13 @@ namespace Kata;
 public struct Transaction
 {
     public DateTime Date { get; }
-    public TransactionType Deposit { get; }
+    public TransactionType Type { get; }
     public int Amount { get; }
 
-    public Transaction(DateTime date, TransactionType deposit, int amount)
+    public Transaction(DateTime date, TransactionType type, int amount)
     {
         Date = date;
-        Deposit = deposit;
+        Type = type;
         Amount = amount;
     }
 }
