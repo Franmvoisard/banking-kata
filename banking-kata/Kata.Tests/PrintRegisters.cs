@@ -9,7 +9,8 @@ public class PrintRegisters
     {
         //Given
         var console = Substitute.For<IConsole>();
-        var account = new Account();
+        var moneyRepository = Substitute.For<IMoneyRepository>();
+        var account = new Account(moneyRepository);
 
         //When
         account.Deposit(500);
