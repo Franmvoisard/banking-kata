@@ -34,4 +34,20 @@ public class TransactionPrinterShould
         //Then
         _console.Received(1).Print("26/09/2022|+300|300");
     }
+    
+    [Test]
+    public void Print_A_Withdraw()
+    {
+        //Given
+        const int withdrawAmount = 300;
+        _dateProvider = Substitute.For<IDateProvider>();
+        _dateProvider.GetDate().Returns(new DateTime(2022, 09, 26));
+        _moneyRepository.Get().Returns(withdrawAmount);
+        
+        //When
+        _transactionPrinter.Print(new Transaction(_dateProvider.GetDate(), TransactionType.Withdraw, withdrawAmount));
+        
+        //Then
+        _console.Received(1).Print("26/09/2022|-300|300");
+    }
 }
