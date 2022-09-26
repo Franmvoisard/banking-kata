@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using NUnit.Framework;
 
 namespace Kata.Tests.Domain;
@@ -9,7 +11,9 @@ public class AccountShould
     {
         //Given
         var moneyRepository = new InMemoryMoneyRepository();
-        var account = new Account(moneyRepository);
+        var transactionsRepository = new TransactionRepository();
+        var dateProvider = new DateProvider();
+        var account = new Account(moneyRepository, transactionsRepository, dateProvider);
         const int expectedAmount = 100;
 
         //When
@@ -25,7 +29,9 @@ public class AccountShould
     {
         //Given
         var moneyRepository = new InMemoryMoneyRepository(300);
-        var account = new Account(moneyRepository);
+        var transactionsRepository = new TransactionRepository();
+        var dateProvider = new DateProvider();
+        var account = new Account(moneyRepository, transactionsRepository, dateProvider);
         const int expectedAmount = 100;
         const int withdrawAmount = 200;
 
@@ -36,4 +42,25 @@ public class AccountShould
         var result = account.GetFunds();
         Assert.AreEqual(expectedAmount, result);
     }
+
+    [Test]
+    public void Register_Transaction()
+    {
+        const int expectedAmountOfTransactions = 1;
+        const int depositAmount = 100;
+        var dateProvider = new DateProvider();
+        var expectedTransaction = new Transaction(dateProvider.GetDate(), TransactionType.Deposit, depositAmount);
+        var transactionsRepository = new TransactionRepository();
+        var moneyRepository = new InMemoryMoneyRepository();
+        var account = new Account(moneyRepository, transactionsRepository, dateProvider);
+        
+        //When
+        account.Deposit(depositAmount);
+        
+        //Then
+        var transactions = transactionsRepository.GetAll().ToArray();
+        Assert.AreEqual(expectedTransaction, transactions.First());
+        Assert.AreEqual(expectedAmountOfTransactions,transactions.Length);
+    }
+
 }
