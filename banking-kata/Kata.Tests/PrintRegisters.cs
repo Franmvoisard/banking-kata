@@ -11,12 +11,15 @@ public class PrintRegisters
         var console = Substitute.For<IConsole>();
         var moneyRepository = Substitute.For<IMoneyRepository>();
         var transactionsRepository = new TransactionRepository();
+        var transactionPrinter = Substitute.For<ITransactionPrinter>();
         var dateProvider = new DateProvider();
-        var account = new Account(moneyRepository, transactionsRepository, dateProvider);
-
-        //When
+        var account = new Account(moneyRepository, transactionsRepository, dateProvider, transactionPrinter);
+    
         account.Deposit(500);
-        account.Withdraw(100);
+        account.Withdraw(100); 
+        
+        //When
+        account.PrintStatement();
         
         //Then
        Received.InOrder(() =>

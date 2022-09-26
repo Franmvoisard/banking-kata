@@ -1,4 +1,5 @@
 using System.Linq;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace Kata.Tests.Domain;
@@ -9,6 +10,7 @@ public class AccountShould
     private TransactionRepository _transactionsRepository;
     private DateProvider _dateProvider;
     private Account _account;
+    private ITransactionPrinter _transactionPrinter;
 
     [SetUp]
     public void Setup()
@@ -16,7 +18,8 @@ public class AccountShould
         _moneyRepository = new InMemoryMoneyRepository();
         _transactionsRepository = new TransactionRepository();
         _dateProvider = new DateProvider();
-        _account = new Account(_moneyRepository, _transactionsRepository, _dateProvider);
+        _transactionPrinter = new TransactionPrinter();
+        _account = new Account(_moneyRepository, _transactionsRepository, _dateProvider, _transactionPrinter);
     }
 
     [Test]
@@ -38,7 +41,7 @@ public class AccountShould
     {
         //Given
         _moneyRepository = new InMemoryMoneyRepository(300);
-        _account = new Account(_moneyRepository, _transactionsRepository, _dateProvider);
+        _account = new Account(_moneyRepository, _transactionsRepository, _dateProvider, _transactionPrinter);
         const int expectedAmount = 100;
         const int withdrawAmount = 200;
 
@@ -80,5 +83,26 @@ public class AccountShould
         var transactions = _transactionsRepository.GetAll().ToArray();
         Assert.AreEqual(expectedTransaction, transactions.First());
         Assert.AreEqual(expectedAmountOfTransactions,transactions.Length);
+    }
+
+    [Test]
+    public void Print_Statements()
+    {
+        //Given
+        var transactionPrinter = Substitute.For<ITransactionPrinter>();
+        _account = new Account(_moneyRepository, _transactionsRepository, _dateProvider, transactionPrinter);
+        _account.Deposit(100);
+        _account.Withdraw(100);
+
+        //When
+        _account.PrintStatement();
+        
+        //Then
+        var transactions = _transactionsRepository.GetAll().ToArray();
+        Received.InOrder(() =>
+        {
+            transactionPrinter.Print(transactions[0]);
+            transactionPrinter.Print(transactions[1]);
+        });
     }
 }

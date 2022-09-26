@@ -5,11 +5,14 @@ public class Account
     private readonly IMoneyRepository _moneyRepository;
     private readonly ITransactionRepository _transactionRepository;
     private readonly IDateProvider _dateProvider;
-    public Account(IMoneyRepository moneyRepository, ITransactionRepository transactionRepository, IDateProvider dateProvider)
+    private readonly ITransactionPrinter _transactionPrinter;
+
+    public Account(IMoneyRepository moneyRepository, ITransactionRepository transactionRepository, IDateProvider dateProvider, ITransactionPrinter transactionPrinter)
     {
         _moneyRepository = moneyRepository;
         _transactionRepository = transactionRepository;
         _dateProvider = dateProvider;
+        _transactionPrinter = transactionPrinter;
     }
 
     public void Deposit(int amount)
@@ -27,19 +30,14 @@ public class Account
         var transaction = new Transaction(date, TransactionType.Withdraw, amount);
         _transactionRepository.Add(transaction);
     }
-}
 
-public class DateProvider : IDateProvider
-{
-    public DateTime GetDate()
+    public void PrintStatement()
     {
-        return DateTime.Today;
+        foreach (var transaction in _transactionRepository.GetAll())
+        {
+            _transactionPrinter.Print(transaction);
+        }
     }
-}
-
-public interface IDateProvider
-{
-    DateTime GetDate();
 }
 
 public enum TransactionType
