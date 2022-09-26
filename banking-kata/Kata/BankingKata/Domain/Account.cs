@@ -16,6 +16,7 @@ public class Account
 
     public void Withdraw(int amount)
     {
+        _moneyRepository.Remove(amount);
     }
 
     public int GetFunds()
@@ -28,4 +29,5 @@ public interface IMoneyRepository
 {
     void Add(int amount);
     int Get();
+    void Remove(int amount);
 }

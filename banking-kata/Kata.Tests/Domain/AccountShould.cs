@@ -1,4 +1,3 @@
-using NSubstitute;
 using NUnit.Framework;
 
 namespace Kata.Tests.Domain;
@@ -15,6 +14,23 @@ public class AccountShould
 
         //When
         account.Deposit(100);
+
+        //Then
+        var result = account.GetFunds();
+        Assert.AreEqual(expectedAmount, result);
+    }
+    
+    [Test]
+    public void Decrement_Money_When_Withdraw()
+    {
+        //Given
+        var moneyRepository = new InMemoryMoneyRepository(300);
+        var account = new Account(moneyRepository);
+        const int expectedAmount = 100;
+        const int withdrawAmount = 200;
+
+        //When
+        account.Withdraw(withdrawAmount);
 
         //Then
         var result = account.GetFunds();
