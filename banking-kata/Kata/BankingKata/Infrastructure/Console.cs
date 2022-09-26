@@ -1,4 +1,4 @@
-namespace Kata.Tests;
+namespace Kata;
 
 public class Console : IConsole
 {
