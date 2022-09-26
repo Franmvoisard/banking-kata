@@ -29,7 +29,7 @@ public class AccountShould
         _account.Deposit(100);
 
         //Then
-        var result = _account.GetFunds();
+        var result = _moneyRepository.Get();
         Assert.AreEqual(expectedAmount, result);
     }
     
@@ -46,7 +46,7 @@ public class AccountShould
         _account.Withdraw(withdrawAmount);
 
         //Then
-        var result = _account.GetFunds();
+        var result = _moneyRepository.Get();
         Assert.AreEqual(expectedAmount, result);
     }
 

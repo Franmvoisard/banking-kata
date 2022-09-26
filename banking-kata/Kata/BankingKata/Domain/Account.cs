@@ -27,11 +27,6 @@ public class Account
         var transaction = new Transaction(date, TransactionType.Withdraw, amount);
         _transactionRepository.Add(transaction);
     }
-
-    public int GetFunds()
-    {
-        return _moneyRepository.Get();
-    }
 }
 
 public class DateProvider : IDateProvider
