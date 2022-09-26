@@ -51,7 +51,7 @@ public class AccountShould
     }
 
     [Test]
-    public void Register_Transaction()
+    public void Register_Deposit_Transaction()
     {
         const int expectedAmountOfTransactions = 1;
         const int depositAmount = 100;
@@ -59,6 +59,22 @@ public class AccountShould
         
         //When
         _account.Deposit(depositAmount);
+        
+        //Then
+        var transactions = _transactionsRepository.GetAll().ToArray();
+        Assert.AreEqual(expectedTransaction, transactions.First());
+        Assert.AreEqual(expectedAmountOfTransactions,transactions.Length);
+    }
+
+    [Test]
+    public void Register_Withdraw_Transaction()
+    {
+        const int expectedAmountOfTransactions = 1;
+        const int withdrawAmount = 100;
+        var expectedTransaction = new Transaction(_dateProvider.GetDate(), TransactionType.Withdraw, withdrawAmount);
+        
+        //When
+        _account.Withdraw(withdrawAmount);
         
         //Then
         var transactions = _transactionsRepository.GetAll().ToArray();

@@ -22,7 +22,10 @@ public class Account
 
     public void Withdraw(int amount)
     {
-        _moneyRepository.Remove(amount);
+        _moneyRepository.Remove(amount); 
+        var date = _dateProvider.GetDate();
+        var transaction = new Transaction(date, TransactionType.Withdraw, amount);
+        _transactionRepository.Add(transaction);
     }
 
     public int GetFunds()
