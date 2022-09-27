@@ -31,12 +31,14 @@ public class Account
         _transactionRepository.Add(transaction);
     }
 
-    public void PrintStatement()
+    public void PrintStatements()
     {
-        foreach (var transaction in _transactionRepository.GetAll())
-        {
-            _transactionPrinter.Print(transaction);
-        }
+        PrintTransactions();
+    }
+
+    private void PrintTransactions()
+    {
+        _transactionPrinter.Print(_transactionRepository.GetAll());
     }
 }
 

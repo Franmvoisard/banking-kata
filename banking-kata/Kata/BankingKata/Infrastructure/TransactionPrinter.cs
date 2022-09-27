@@ -13,8 +13,19 @@ public class TransactionPrinter : ITransactionPrinter
         _moneyRepository = moneyRepository;
         _console = console;
     }
-    
-    public void Print(Transaction transaction)
+
+    public void Print(IEnumerable<Transaction> transactions)
+    {
+        PrintHeaders();
+        PrintAllTransactions(transactions);
+    }
+
+    private void PrintAllTransactions(IEnumerable<Transaction> transactions)
+    {
+        transactions.ToList().ForEach(PrintTransaction);
+    }
+
+    private void PrintTransaction(Transaction transaction)
     {
         var stringBuilder = new StringBuilder();
         var date = transaction.Date.ToString("dd/MM/yyyy");
@@ -29,6 +40,11 @@ public class TransactionPrinter : ITransactionPrinter
             .Append(_moneyRepository.Get());
         
         _console.Print(output.ToString());
+    }
+
+    private void PrintHeaders()
+    {
+        _console.Print("Date       | Amount | Balance");
     }
 
     private static char GetAmountSign(Transaction transaction)

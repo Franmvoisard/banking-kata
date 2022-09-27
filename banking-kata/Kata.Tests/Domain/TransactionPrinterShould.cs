@@ -30,7 +30,7 @@ public class TransactionPrinterShould
         var transaction = new Transaction(_dateProvider.GetDate(), TransactionType.Deposit, depositAmount);
         
         //When
-        _transactionPrinter.Print(transaction);
+        _transactionPrinter.Print(new []{ transaction });
         
         //Then
         _console.Received(1).Print("26/09/2022|+300|300");
@@ -47,7 +47,7 @@ public class TransactionPrinterShould
         var transaction = new Transaction(_dateProvider.GetDate(), TransactionType.Withdraw, withdrawAmount);
         
         //When
-        _transactionPrinter.Print(transaction);
+        _transactionPrinter.Print(new []{ transaction });
         
         //Then
         _console.Received(1).Print("26/09/2022|-300|300");

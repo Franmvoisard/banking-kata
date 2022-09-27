@@ -19,7 +19,7 @@ public class PrintRegisters
         account.Withdraw(100); 
         
         //When
-        account.PrintStatement();
+        account.PrintStatements();
         
         //Then
        Received.InOrder(() =>

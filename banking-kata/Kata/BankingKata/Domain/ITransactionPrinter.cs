@@ -2,5 +2,5 @@ namespace Kata;
 
 public interface ITransactionPrinter
 {
-    void Print(Transaction transaction);
+    void Print(IEnumerable<Transaction> transaction);
 }

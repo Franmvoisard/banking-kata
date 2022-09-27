@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Text;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -97,14 +98,49 @@ public class AccountShould
         _account.Withdraw(100);
 
         //When
-        _account.PrintStatement();
+        _account.PrintStatements();
         
         //Then
-        var transactions = _transactionsRepository.GetAll().ToArray();
+        var transactions = _transactionsRepository.GetAll();
+        transactionPrinter.Received(1).Print(transactions);
+    }
+    
+    [Test]
+    public void Print_Header_Before_Statements()
+    {
+        //Given
+        const int depositAmount = 100;
+        const int expectedBalance = 100;
+        
+        _console = Substitute.For<IConsole>();
+        _transactionPrinter = new TransactionPrinter(_moneyRepository, _console);
+        _account = new Account(_moneyRepository, _transactionsRepository, _dateProvider, _transactionPrinter);
+        
+        _account.Deposit(depositAmount);
+        var date = _dateProvider.GetDate().ToString("dd/MM/yyyy");
+        const char separator = '|';
+        var transactionStatement = GetTransactionStatement(date, separator, TransactionType.Deposit, depositAmount, expectedBalance);
+        
+        //When
+        _account.PrintStatements();
+        
+        //Then
         Received.InOrder(() =>
         {
-            transactionPrinter.Print(transactions[0]);
-            transactionPrinter.Print(transactions[1]);
+            _console.Received(1).Print("Date       | Amount | Balance");
+            _console.Received(1).Print(transactionStatement);
         });
+    }
+
+    private static string GetTransactionStatement(string date, char separator, TransactionType type, int depositAmount, int balance)
+    {
+        return new StringBuilder()
+            .Append(date)
+            .Append(separator)
+            .Append(type == TransactionType.Deposit ? '+' : '-')
+            .Append(depositAmount)
+            .Append(separator)
+            .Append(balance)
+            .ToString();
     }
 }
