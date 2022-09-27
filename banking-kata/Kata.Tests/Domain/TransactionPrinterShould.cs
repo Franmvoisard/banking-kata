@@ -27,9 +27,10 @@ public class TransactionPrinterShould
         _dateProvider = Substitute.For<IDateProvider>();
         _dateProvider.GetDate().Returns(new DateTime(2022, 09, 26));
         _moneyRepository.Get().Returns(depositAmount);
+        var transaction = new Transaction(_dateProvider.GetDate(), TransactionType.Deposit, depositAmount);
         
         //When
-        _transactionPrinter.Print(new Transaction(_dateProvider.GetDate(), TransactionType.Deposit, depositAmount));
+        _transactionPrinter.Print(transaction);
         
         //Then
         _console.Received(1).Print("26/09/2022|+300|300");
@@ -43,9 +44,10 @@ public class TransactionPrinterShould
         _dateProvider = Substitute.For<IDateProvider>();
         _dateProvider.GetDate().Returns(new DateTime(2022, 09, 26));
         _moneyRepository.Get().Returns(withdrawAmount);
+        var transaction = new Transaction(_dateProvider.GetDate(), TransactionType.Withdraw, withdrawAmount);
         
         //When
-        _transactionPrinter.Print(new Transaction(_dateProvider.GetDate(), TransactionType.Withdraw, withdrawAmount));
+        _transactionPrinter.Print(transaction);
         
         //Then
         _console.Received(1).Print("26/09/2022|-300|300");
