@@ -28,7 +28,7 @@ public class TransactionPrinter : ITransactionPrinter
     private void PrintTransaction(Transaction transaction)
     {
         var stringBuilder = new StringBuilder();
-        var date = transaction.Date.ToString("dd/MM/yyyy");
+        var date = transaction.Date.ToString("dd.M.yyyy");
         var transactionSign = GetAmountSign(transaction);
             
         var output = stringBuilder

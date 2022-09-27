@@ -33,7 +33,7 @@ public class TransactionPrinterShould
         _transactionPrinter.Print(new []{ transaction });
         
         //Then
-        _console.Received(1).Print("26/09/2022|+300|300");
+        _console.Received(1).Print("26.9.2022|+300|300");
     }
     
     [Test]
@@ -42,7 +42,7 @@ public class TransactionPrinterShould
         //Given
         const int withdrawAmount = 300;
         _dateProvider = Substitute.For<IDateProvider>();
-        _dateProvider.GetDate().Returns(new DateTime(2022, 09, 26));
+        _dateProvider.GetDate().Returns(new DateTime(2022, 10, 26));
         _moneyRepository.Get().Returns(withdrawAmount);
         var transaction = new Transaction(_dateProvider.GetDate(), TransactionType.Withdraw, withdrawAmount);
         
@@ -50,6 +50,6 @@ public class TransactionPrinterShould
         _transactionPrinter.Print(new []{ transaction });
         
         //Then
-        _console.Received(1).Print("26/09/2022|-300|300");
+        _console.Received(1).Print("26.10.2022|-300|300");
     }
 }

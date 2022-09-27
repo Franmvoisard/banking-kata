@@ -117,7 +117,7 @@ public class AccountShould
         _account = new Account(_moneyRepository, _transactionsRepository, _dateProvider, _transactionPrinter);
         
         _account.Deposit(depositAmount);
-        var date = _dateProvider.GetDate().ToString("dd/MM/yyyy");
+        var date = _dateProvider.GetDate().ToString("dd.M.yyyy");
         const char separator = '|';
         var transactionStatement = GetTransactionStatement(date, separator, TransactionType.Deposit, depositAmount, expectedBalance);
         
