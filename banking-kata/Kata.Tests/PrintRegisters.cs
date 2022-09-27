@@ -12,7 +12,7 @@ public class PrintRegisters
         var console = Substitute.For<IConsole>();
         var moneyRepository = new InMemoryMoneyRepository();
         var transactionsRepository = new TransactionRepository();
-        var transactionPrinter = new TransactionPrinter(moneyRepository, console);
+        var transactionPrinter = new TransactionPrinter(console);
         var dateProvider = Substitute.For<IDateProvider>();
 
         var datesToReturn = new DateTime[] {
@@ -33,8 +33,8 @@ public class PrintRegisters
        Received.InOrder(() =>
            {
                console.Print("Date       | Amount | Balance");
-               console.Print("24.12.2015 | +500   | 500");
-               console.Print("23.8.2016  | -100   | 400");
+               console.Print("24.12.2015|+500|500");
+               console.Print("23.8.2016|-100|400");
            });
     }
 }

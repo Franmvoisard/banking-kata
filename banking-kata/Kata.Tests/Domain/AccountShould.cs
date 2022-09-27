@@ -21,7 +21,7 @@ public class AccountShould
         _transactionsRepository = new TransactionRepository();
         _dateProvider = new DateProvider();
         _console = new Console();
-        _transactionPrinter = new TransactionPrinter(_moneyRepository, _console);
+        _transactionPrinter = new TransactionPrinter(_console);
         _account = new Account(_moneyRepository, _transactionsRepository, _dateProvider, _transactionPrinter);
     }
 
@@ -61,7 +61,7 @@ public class AccountShould
     {
         const int expectedAmountOfTransactions = 1;
         const int depositAmount = 100;
-        var expectedTransaction = new Transaction(_dateProvider.GetDate(), TransactionType.Deposit, depositAmount);
+        var expectedTransaction = new Transaction(_dateProvider.GetDate(), TransactionType.Deposit, depositAmount, 100);
         
         //When
         _account.Deposit(depositAmount);
@@ -77,7 +77,9 @@ public class AccountShould
     {
         const int expectedAmountOfTransactions = 1;
         const int withdrawAmount = 100;
-        var expectedTransaction = new Transaction(_dateProvider.GetDate(), TransactionType.Withdraw, withdrawAmount);
+        _moneyRepository = new InMemoryMoneyRepository(300);
+        _account = new Account(_moneyRepository, _transactionsRepository, _dateProvider, _transactionPrinter);
+        var expectedTransaction = new Transaction(_dateProvider.GetDate(), TransactionType.Withdraw, withdrawAmount, 200);
         
         //When
         _account.Withdraw(withdrawAmount);
@@ -113,7 +115,7 @@ public class AccountShould
         const int expectedBalance = 100;
         
         _console = Substitute.For<IConsole>();
-        _transactionPrinter = new TransactionPrinter(_moneyRepository, _console);
+        _transactionPrinter = new TransactionPrinter(_console);
         _account = new Account(_moneyRepository, _transactionsRepository, _dateProvider, _transactionPrinter);
         
         _account.Deposit(depositAmount);

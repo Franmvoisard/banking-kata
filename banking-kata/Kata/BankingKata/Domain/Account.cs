@@ -19,7 +19,7 @@ public class Account
     {
         _moneyRepository.Add(amount);
         var date = _dateProvider.GetDate();
-        var transaction = new Transaction(date, TransactionType.Deposit, amount);
+        var transaction = new Transaction(date, TransactionType.Deposit, amount, _moneyRepository.Get());
         _transactionRepository.Add(transaction);
     }
 
@@ -27,7 +27,7 @@ public class Account
     {
         _moneyRepository.Remove(amount); 
         var date = _dateProvider.GetDate();
-        var transaction = new Transaction(date, TransactionType.Withdraw, amount);
+        var transaction = new Transaction(date, TransactionType.Withdraw, amount, _moneyRepository.Get());
         _transactionRepository.Add(transaction);
     }
 

@@ -5,12 +5,10 @@ namespace Kata;
 public class TransactionPrinter : ITransactionPrinter
 {
     private const char Separator = '|';
-    private readonly IMoneyRepository _moneyRepository;
     private readonly IConsole _console;
 
-    public TransactionPrinter(IMoneyRepository moneyRepository, IConsole console)
+    public TransactionPrinter(IConsole console)
     {
-        _moneyRepository = moneyRepository;
         _console = console;
     }
 
@@ -37,7 +35,7 @@ public class TransactionPrinter : ITransactionPrinter
             .Append(transactionSign)
             .Append(transaction.Amount)
             .Append(Separator)
-            .Append(_moneyRepository.Get());
+            .Append(transaction.Balance);
         
         _console.Print(output.ToString());
     }
